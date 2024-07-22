@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chatbox {
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+        }
+        #messages li {
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #d4edda;
+            align-self: flex-end;
+        }
+        .assistant-message {
+            background-color: #f8d7da;
+        }
+        #input-container {
+            display: flex;
+        }
+        #input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #input-container button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div id="chatbox">
+    <ul id="messages"></ul>
+    <div id="input-container">
+        <input type="text" id="query" placeholder="Type your message here...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    const userId = 'user123';  // Ideally, this should be unique for each user
+
+    async function sendMessage() {
+        const query = document.getElementById('query').value;
+        if (query.trim() === '') return;
+
+        displayMessage('user', query);
+
+        const response = await fetch('http://localhost:8000/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user_id: userId, query: query })
+        });
+
+        const data = await response.json();
+        displayMessage('assistant', data.response);
+        document.getElementById('query').value = '';
+    }
+
+    function displayMessage(role, message) {
+        const messageElement = document.createElement('li');
+        messageElement.textContent = message;
+        messageElement.classList.add(role === 'user' ? 'user-message' : 'assistant-message');
+        document.getElementById('messages').appendChild(messageElement);
+    }
+</script>
+</body>
+</html>
