@@ -26,7 +26,7 @@ class ChatResponse(BaseModel):
 
 # meta-llama/Meta-Llama-3-8B-Instruct is a large model that can be used for chatbot applications
 # TinyLlama/TinyLlama-1.1B-Chat-v1.0 is a smaller model that can be used for chatbot applications
-MODEL_PATH = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+MODEL_PATH = "meta-llama/Meta-Llama-3-8B-Instruct"
 
 
 # Define the Llama3 class
